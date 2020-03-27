@@ -3,3 +3,12 @@
 ################################################################################
 
 /.vs/PointingPokerPlus
+/PointingPokerPlus/Client/bin/Debug
+/PointingPokerPlus/Client/obj
+/PointingPokerPlus/Client/Properties/launchSettings.json
+/PointingPokerPlus/Server/bin/Debug/netcoreapp3.1
+/PointingPokerPlus/Server/obj
+/PointingPokerPlus/Server/PointingPokerPlus.Server.csproj.user
+/PointingPokerPlus/Client/PointingPokerPlus.Client.csproj.user
+/PointingPokerPlus/Shared/bin/Debug
+/PointingPokerPlus/Shared/obj

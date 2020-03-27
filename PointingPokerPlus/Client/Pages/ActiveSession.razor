@@ -1,0 +1,14 @@
+﻿@page "/activesession/{SessionId}"
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>ActiveSession: @SessionId</h3>
+@foreach (var b in SessionState.Value.Session.Options.PointSystem)
+{
+    <button @onclick="@(() => Send(b))">@b</button>
+}
+@foreach (var u in SessionState.Value.Session.Users)
+{
+    <ul>
+        <li>@u.Name : @u.Points</li>
+    </ul>
+}

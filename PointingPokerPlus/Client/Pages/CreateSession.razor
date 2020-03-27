@@ -1,0 +1,12 @@
+﻿@page "/createsession"
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<div>
+    
+    <p>
+        <MatTextField @bind-Value="@_myStringValue" Label="Name"></MatTextField>
+    </p>
+    <p>
+        <MatButton OnClick="JoinSession" Raised="true">Join Session</MatButton>
+    </p>
+</div>
