@@ -1,10 +1,11 @@
 ﻿@page "/createsession"
+@page "/createsession/{SessionId}"
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <div>
-    
+
     <p>
-        <MatTextField @bind-Value="@_myStringValue" Label="Name"></MatTextField>
+        <MatTextField @bind-Value="@_userName" Label="Name"></MatTextField>
     </p>
     <p>
         <MatButton OnClick="JoinSession" Raised="true">Join Session</MatButton>

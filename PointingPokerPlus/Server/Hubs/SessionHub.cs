@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using PointingPokerPlus.Server.Data;
 using PointingPokerPlus.Shared;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,10 +18,10 @@ namespace PointingPokerPlus.Server.Hubs
 		{
 			var entity = _context.Sessions.FirstOrDefault(item => item.Id == sessionId);
 			entity.Users.Find(u => u.Id == userId).Points = points;
+			_context.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 			_context.Update(entity);
 			await _context.SaveChangesAsync();
 			await Clients.All.SendAsync("ReceivePoints", userId, points);
-
 		}
 
 		public async Task CreateSession(Session session)
@@ -32,10 +30,12 @@ namespace PointingPokerPlus.Server.Hubs
 			_context.Add(session);
 			await _context.SaveChangesAsync();
 		}
-		public async Task<Session> JoinSession(string sessionId)
+		public async Task<Session> JoinSession(string sessionId, string userId)
 		{
 			//join session by id
 			var session = await _context.Sessions.FindAsync(sessionId);
+			session.Users.Add(await _context.Users.FindAsync(userId));
+
 			if (session != null)
 			{
 				return session;

@@ -14,11 +14,12 @@ namespace PointingPokerPlus.Shared
 		[NotMapped]
 		public SessionOptions Options { get; set; }
 		public List<User> Users { get; set; }
+		[NotMapped]
 		public User ActiveUser { get; set; }
 
 		public Session()
 		{
-			Id = RandomGenerators.GenerateSessionId();
+			Id = RandomGenerators.GenerateRandomId();
 			Name = "New Session";
 			Options = new SessionOptions { 
 				PointSystem = new List<int> { 1, 2, 3, 5, 8, 13 }, 

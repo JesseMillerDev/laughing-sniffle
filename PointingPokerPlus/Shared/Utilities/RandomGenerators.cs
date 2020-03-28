@@ -6,7 +6,7 @@ namespace PointingPokerPlus.Shared.Utilities
 {
 	public static class RandomGenerators
 	{
-		public static string GenerateSessionId()
+		public static string GenerateRandomId()
 		{
 			StringBuilder builder = new StringBuilder();
 			Enumerable

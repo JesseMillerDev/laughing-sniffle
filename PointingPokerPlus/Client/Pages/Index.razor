@@ -5,9 +5,19 @@
 
 <MatButton OnClick=@CreateSession Raised="true">Create Session</MatButton>
 
+<p>
+    <MatTextField @bind-Value="@_sessionId" Label="SessionId"></MatTextField>
+    <MatButton OnClick=@JoinSession Raised="true">Join Session</MatButton>
+</p>
+
 @code{
+    protected string _sessionId;
 
     void CreateSession()
+    {
+        NavManager.NavigateTo("/createSession");
+    }
+    void JoinSession()
     {
         NavManager.NavigateTo("/createSession");
     }

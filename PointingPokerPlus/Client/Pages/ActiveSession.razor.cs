@@ -36,10 +36,10 @@ namespace PointingPokerPlus.Client.Pages
 
             await _hubConnection.StartAsync();
 
-            await Send(SessionState.Value.Session);
+            
         }
 
-        Task Send(Session session) => _hubConnection.SendAsync("CreateSession", session);
+        
         Task Send(int points) => _hubConnection.SendAsync("SendPoints", SessionState.Value.Session.Id, SessionState.Value.Session.ActiveUser.Id, points);
 
         public bool IsConnected => _hubConnection.State == HubConnectionState.Connected;

@@ -30,6 +30,17 @@ namespace PointingPokerPlus.Client.Store.Session
 			User = user;
 		}
 	}
+	public class LoadSessionAction
+	{
+		public User User { get; set; }
+		public PointingPokerPlus.Shared.Session Session { get; set; }
+
+		public LoadSessionAction(User user, PointingPokerPlus.Shared.Session session)
+		{
+			User = user;
+			Session = session;
+		}
+	}
 
 	public class ReceivePointsAction
 	{
@@ -62,6 +73,14 @@ namespace PointingPokerPlus.Client.Store.Session
 		{
 			var initialState = new PointingPokerPlus.Shared.Session();
 			initialState.Users.Add(action.User);
+			initialState.ActiveUser = action.User;
+			return new SessionState(session: initialState);
+		}
+
+		[ReducerMethod]
+		public static SessionState ReduceLoadSessionAction(SessionState state, LoadSessionAction action)
+		{
+			var initialState = action.Session;
 			initialState.ActiveUser = action.User;
 			return new SessionState(session: initialState);
 		}
