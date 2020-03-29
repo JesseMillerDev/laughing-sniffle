@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
 using PointingPokerPlus.Client.Store.Session;
 using PointingPokerPlus.Shared;
+using System;
 using System.Threading.Tasks;
 
 namespace PointingPokerPlus.Client.Pages
@@ -37,14 +38,17 @@ namespace PointingPokerPlus.Client.Pages
             
             _hubConnection.On<User>("UserJoined", (user) =>
             {
+                Console.WriteLine($"User {user.Name} joined!");
                 var action = new UserJoinedAction(user);
                 Dispatcher.Dispatch(action);
             });
 
             await _hubConnection.StartAsync();
+
+            await JoinSession(SessionId, SessionState.Value.Session.ActiveUser);
         }
 
-        
+        Task JoinSession(string sessionId, User user) => _hubConnection.SendAsync("JoinSession", sessionId, user);
         Task SendPoints(int points) => _hubConnection.SendAsync("SendPoints", SessionState.Value.Session.Id, SessionState.Value.Session.ActiveUser.Id, points);
         public bool IsConnected => _hubConnection.State == HubConnectionState.Connected;
 
