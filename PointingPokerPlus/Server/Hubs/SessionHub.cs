@@ -23,21 +23,18 @@ namespace PointingPokerPlus.Server.Hubs
 			await _context.SaveChangesAsync();
 			await Clients.All.SendAsync("ReceivePoints", userId, points);
 		}
-
-		public async Task CreateSession(Session session)
+		
+		public async Task<Session> JoinSession(string sessionId, User user)
 		{
-			//create new session
-			_context.Add(session);
-			await _context.SaveChangesAsync();
-		}
-		public async Task<Session> JoinSession(string sessionId, string userId)
-		{
-			//join session by id
+			//Find an existing session
 			var session = await _context.Sessions.FindAsync(sessionId);
-			session.Users.Add(await _context.Users.FindAsync(userId));
-
+			
+			//If the session exists do these things...
 			if (session != null)
 			{
+				await Clients.Group(sessionId).SendAsync("UserJoined", user);
+				await Groups.AddToGroupAsync(Context.ConnectionId, sessionId);
+
 				return session;
 			}
 			else

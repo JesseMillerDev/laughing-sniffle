@@ -4,7 +4,7 @@
 <h3>ActiveSession: @SessionId</h3>
 @foreach (var b in SessionState.Value.Session.Options.PointSystem)
 {
-    <button @onclick="@(() => Send(b))">@b</button>
+    <button @onclick="@(() => SendPoints(b))">@b</button>
 }
 @foreach (var u in SessionState.Value.Session.Users)
 {

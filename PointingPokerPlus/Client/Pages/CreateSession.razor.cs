@@ -5,58 +5,39 @@ using PointingPokerPlus.Client.Store.Session;
 using PointingPokerPlus.Shared;
 using PointingPokerPlus.Shared.Utilities;
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PointingPokerPlus.Client.Pages
 {
 	public partial class CreateSession
-	{
-        [Parameter]
-        public string SessionId { get; set; }
-
+	{       
         [Inject]
 		private IState<SessionState> SessionState { get; set; }
         [Inject]
         public IDispatcher Dispatcher { get; set; }
         [Inject]
         public NavigationManager NavManager { get; set; }
+        [Inject]
+        public HttpClient Http { get; set; }
 
-        private HubConnection _hubConnection;
-
+        [Parameter]
+        public string SessionId { get; set; }
+        private User _activeUser;
         protected string _userName;
 
-        protected override async Task OnInitializedAsync()
+        async Task StartOrJoinSession()
         {
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl(NavManager.ToAbsoluteUri("/sessionHub"))
-                .Build();
+            _activeUser = new User { Id = RandomGenerators.GenerateRandomId(), Name = _userName };
+            var request = new StartJoinSessionRequest { SessionId = SessionId, User = _activeUser };
 
-            await _hubConnection.StartAsync();
+            //Call Start Or Join
+            var session = await Http.PostJsonAsync<Session>("Session/startOrJoin", request);
 
-            
-               
-        }
-
-        async Task JoinSession()
-        {
-            var user = new User { Id = RandomGenerators.GenerateRandomId(), Name = _userName };
-            
-            if (SessionId == null)
-            {
-                var action = new CreateSessionAction(user);
-                Dispatcher.Dispatch(action);
-                Send(SessionState.Value.Session);
-            }
-            else
-            {
-                var session = await _hubConnection.InvokeAsync<Session>("JoinSession", SessionId);
-                var action = new LoadSessionAction(user, session);
-                Dispatcher.Dispatch(action);
-            }
+            var action = new LoadSessionAction(_activeUser, session);
+            Dispatcher.Dispatch(action);
 
             NavManager.NavigateTo($"/activeSession/{SessionState.Value.Session.Id}");
         }
-
-        Task Send(Session session) => _hubConnection.SendAsync("CreateSession", session);
     }
 }

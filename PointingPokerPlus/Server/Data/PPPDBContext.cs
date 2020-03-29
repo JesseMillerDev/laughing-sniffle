@@ -20,7 +20,7 @@ namespace PointingPokerPlus.Server.Data
 		{
 			modelBuilder.Entity<Session>()
 				.HasMany(p => p.Users)
-				.WithOne(p => p.Session);
+				.WithOne();
 			
 		}
 	}

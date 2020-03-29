@@ -21,15 +21,6 @@ namespace PointingPokerPlus.Client.Store.Session
 
 	#region Session Actions
 	
-	public class CreateSessionAction
-	{
-		public User User { get; set; }
-
-		public CreateSessionAction(User user)
-		{
-			User = user;
-		}
-	}
 	public class LoadSessionAction
 	{
 		public User User { get; set; }
@@ -54,6 +45,16 @@ namespace PointingPokerPlus.Client.Store.Session
 		}
 	}
 
+	public class UserJoinedAction
+	{
+		public User User { get; set; }
+
+		public UserJoinedAction(User user)
+		{
+			User = user;
+		}
+	}
+
 	public class SetActiveUserAction
 	{
 		public User User { get; set; }
@@ -69,20 +70,19 @@ namespace PointingPokerPlus.Client.Store.Session
 	public static class SessionReducers
 	{
 		[ReducerMethod]
-		public static SessionState ReduceCreateSessionAction(SessionState state, CreateSessionAction action)
+		public static SessionState ReduceLoadSessionAction(SessionState state, LoadSessionAction action)
 		{
-			var initialState = new PointingPokerPlus.Shared.Session();
-			initialState.Users.Add(action.User);
-			initialState.ActiveUser = action.User;
-			return new SessionState(session: initialState);
+			var newState = action.Session;
+			newState.ActiveUser = action.User;
+			return new SessionState(session: newState);
 		}
 
 		[ReducerMethod]
-		public static SessionState ReduceLoadSessionAction(SessionState state, LoadSessionAction action)
+		public static SessionState ReduceUserJoinedAction(SessionState state, UserJoinedAction action)
 		{
-			var initialState = action.Session;
-			initialState.ActiveUser = action.User;
-			return new SessionState(session: initialState);
+			var newState = state.Session;
+			newState.Users.Add(action.User);
+			return new SessionState(session: newState);
 		}
 
 		[ReducerMethod]
